@@ -34,7 +34,7 @@
   <ol id="journal-entries" style="list-style: none; padding: 0;">
     <% entries.each do |entry| %>
       <li style="margin-bottom: 1rem;">
-        <small><%= l entry.created_at, format: :long %></small>
+        <small><%= entry.created_at.strftime("%B %-d, %Y %H:%M %Z") %></small>
         <p style="white-space: pre-wrap; margin: 0.25rem 0;"><%= entry.body %></p>
       </li>
     <% end %>

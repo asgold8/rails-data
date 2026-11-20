@@ -14,5 +14,6 @@ RUN bundle install
 COPY . .
 
 EXPOSE 3000
+# db:prepare creates, migrates, and seeds a new database.
 # -b 0.0.0.0 so the server is reachable from the host, not just inside the container.
-CMD ["bash", "-c", "bin/rails db:prepare && bin/rails db:seed && bin/rails server -b 0.0.0.0"]
+CMD ["bash", "-c", "bin/rails db:prepare && bin/rails server -b 0.0.0.0"]

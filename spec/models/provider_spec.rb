@@ -14,4 +14,11 @@ RSpec.describe Provider do
 
     expect(build(:provider, email: " ALICE@example.com ")).not_to be_valid
   end
+
+  it "removes its enrollments when destroyed" do
+    provider = create(:provider)
+    create(:enrollment, provider: provider)
+
+    expect { provider.destroy }.to change(Enrollment, :count).by(-1)
+  end
 end
