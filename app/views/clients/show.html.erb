@@ -1,0 +1,42 @@
+<% content_for :title, @client.name %>
+
+<p><%= link_to "All clients", clients_path %></p>
+
+<h1><%= @client.name %></h1>
+
+<h2>Providers</h2>
+<ul>
+  <% @client.enrollments.includes(:provider).each do |enrollment| %>
+    <li><%= enrollment.provider.name %> (<%= enrollment.plan %>)</li>
+  <% end %>
+</ul>
+
+<h2>New journal entry</h2>
+<%= form_with model: [ @client, @journal_entry ] do |form| %>
+  <% if @journal_entry.errors.any? %>
+    <ul style="color: red;">
+      <% @journal_entry.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= form.label :body, "What's on your mind?" %><br>
+  <%= form.text_area :body, rows: 4, style: "width: 100%;" %>
+  <%= form.submit "Post entry" %>
+<% end %>
+
+<h2>Journal</h2>
+<% entries = @client.journal_entries.recent_first %>
+<% if entries.empty? %>
+  <p>No entries yet.</p>
+<% else %>
+  <ol id="journal-entries" style="list-style: none; padding: 0;">
+    <% entries.each do |entry| %>
+      <li style="margin-bottom: 1rem;">
+        <small><%= l entry.created_at, format: :long %></small>
+        <p style="white-space: pre-wrap; margin: 0.25rem 0;"><%= entry.body %></p>
+      </li>
+    <% end %>
+  </ol>
+<% end %>

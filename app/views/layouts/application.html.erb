@@ -23,7 +23,10 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body style="font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem;">
+    <% if notice %>
+      <p style="color: green;"><%= notice %></p>
+    <% end %>
     <%= yield %>
   </body>
 </html>

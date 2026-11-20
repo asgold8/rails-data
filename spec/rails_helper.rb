@@ -37,6 +37,11 @@ end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
+  # Each example runs in a rolled-back transaction, but that doesn't remove rows that were
+  # already in the test DB (e.g. from `bin/ci`'s seeds step or `db:prepare` seeding a new DB).
+  # Start every run from an empty database.
+  config.before(:suite) { ActiveRecord::Tasks::DatabaseTasks.truncate_all }
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
