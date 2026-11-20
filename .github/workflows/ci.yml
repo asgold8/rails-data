@@ -65,3 +65,38 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Prepare test database
+        run: bin/rails db:test:prepare
+
+      - name: Run specs
+        run: bin/rspec
+
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Build image
+        run: docker compose build
+
+      - name: Run specs in the container
+        run: docker compose run --rm -e RAILS_ENV=test web bash -c "bin/rails db:prepare && bin/rspec"
